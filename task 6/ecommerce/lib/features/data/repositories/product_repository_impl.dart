@@ -24,6 +24,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Product?> getProductById(String id) async {
-    return _products.firstWhere((product) => product.id == id, orElse: () => null);
+    return _products.firstWhere((product) => product.id == id);
   }
+  
 }

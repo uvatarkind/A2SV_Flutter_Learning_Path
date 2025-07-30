@@ -6,6 +6,6 @@ class InsertProduct {
   InsertProduct(this.repository);
 
   Future<void> call(Product product) async {
-    return await repository.createProduct(product);
+    return await repository.insertProduct(product);
   }
 }
