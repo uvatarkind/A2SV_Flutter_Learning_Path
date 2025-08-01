@@ -1,4 +1,4 @@
-import 'package:ecommerce/home.dart';
+import 'package:ecommerce/features/presentation/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {

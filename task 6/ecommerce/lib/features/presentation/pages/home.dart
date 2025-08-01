@@ -1,8 +1,8 @@
-import 'package:ecommerce/add.dart';
-import 'package:ecommerce/details.dart';
+import 'package:ecommerce/features/presentation/pages/add.dart';
+import 'package:ecommerce/features/presentation/pages/details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce/card.dart';
+import 'package:ecommerce/features/presentation/pages/card.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.title});
@@ -17,6 +17,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(onPressed: (){
+      }),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
