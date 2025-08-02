@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-
+import 'package:ecommerce/core/network/network_info.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../datasources/product_remote_data_source.dart';
@@ -9,11 +9,33 @@ import '../models/product_model.dart';
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
   final ProductLocalDataSource localDataSource;
-
+  final NetworkInfo networkInfo;
   ProductRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.networkInfo
   });
+
+  @override
+  Future<Either<Failure, List<Product>>> getAllProducts() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteProducts = await remoteDataSource.getAllProducts();
+        localDataSource.cacheProducts(remoteProducts);
+        return Right(remoteProducts);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        final localProducts = await localDataSource.getLastCachedProducts();
+        return Right(localProducts);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
+    }
+  }
+
 
   @override
   Future<List<Product>> getAllProducts() async {
