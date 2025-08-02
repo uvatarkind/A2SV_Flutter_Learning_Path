@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:ecommerce/core/error/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/product_model.dart';
-import 'product_local_datasource.dart';
+import '../datasources/product_local_data_source copy.dart';
 
 const CACHED_PRODUCTS = 'CACHED_PRODUCTS';
 
@@ -29,5 +30,17 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
     } else {
       throw CacheException(); // Define this in your core/errors
     }
+  }
+  
+  @override
+  Future<void> clearCache() {
+    // TODO: implement clearCache
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<ProductModel>> getCachedProducts() {
+    // TODO: implement getCachedProducts
+    throw UnimplementedError();
   }
 }
