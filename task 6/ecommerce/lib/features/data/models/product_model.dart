@@ -32,4 +32,6 @@ class ProductModel extends Product {
       'imageUrl': imageUrl,
     };
   }
+
+  static fromEntity(Product product) {}
 }

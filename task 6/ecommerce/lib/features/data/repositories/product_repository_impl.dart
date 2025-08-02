@@ -1,30 +1,51 @@
+import 'package:flutter/foundation.dart';
+
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
+import '../datasources/product_remote_data_source.dart';
+import '../datasources/product_local_data_source copy.dart';
+import '../models/product_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  final List<Product> _products = [];
+  final ProductRemoteDataSource remoteDataSource;
+  final ProductLocalDataSource localDataSource;
+
+  ProductRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+  });
 
   @override
-  Future<void> insertProduct(Product product) async {
-    _products.add(product);
-  }
-
-  @override
-  Future<void> updateProduct(Product product) async {
-    final index = _products.indexWhere((p) => p.id == product.id);
-    if (index != -1) {
-      _products[index] = product;
+  Future<List<Product>> getAllProducts() async {
+    try {
+      final remoteProducts = await remoteDataSource.fetchAllProducts();
+      localDataSource.cacheProducts(remoteProducts);
+      return remoteProducts;
+    } catch (e) {
+      return await localDataSource.getCachedProducts();
     }
   }
 
   @override
-  Future<void> deleteProduct(String id) async {
-    _products.removeWhere((product) => product.id == id);
+  Future<Product> getProductById(String id) async {
+    final model = await remoteDataSource.fetchProductById(id);
+    return model;
   }
 
   @override
-  Future<Product?> getProductById(String id) async {
-    return _products.firstWhere((product) => product.id == id);
+  Future<void> insertProduct(Product product) async {
+    final model = ProductModel.fromEntity(product);
+    await remoteDataSource.addProduct(model);
   }
-  
+
+  @override
+  Future<void> updateProduct(Product product) async {
+    final model = ProductModel.fromEntity(product);
+    await remoteDataSource.updateProduct(model);
+  }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    await remoteDataSource.removeProduct(id);
+  }
 }
